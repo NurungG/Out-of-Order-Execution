@@ -4,6 +4,8 @@
 #define OOO_EXIT_SUCCESS 0
 #define OOO_EXIT_FAILURE 1
 
+#define REG_MAX 16
+
 typedef enum {
     false, true
 } bool;
@@ -13,37 +15,45 @@ typedef enum {
 } inst;
 
 
-struct fetch_queue {
+struct fetch_node {
     inst type;
     int  dest;
     int  src1;
     int  src2;
-    int  addr;
+	// addr is omitted
+
+	int  pc;
+	bool alloc;
 };
 
-struct reservation_station {
+struct rsv_stn {
+	int  rob_idx;
     int  eu_idx;
-    bool is_busy;
     inst type;
-    // v1, v2 is ommitted
+    // v1, v2 are omitted
     int  q1;
     int  q2;
+
+	int pc;
+	bool alloc;
 };
 
 struct reg_alias_tbl {
     int  rob_idx;
-    bool is_valid;
+    bool rf_valid;
 };
 
 struct execution_unit {
     int time_left;
+	int rs_idx;
 };
 
-struct reorder_buffer {
-    inst type;
-    // value is ommited
+struct rob_node {
+    // op type, value are omited
     int  dest;
     bool state;
+
+	bool alloc;
 };
 
 int ooo_create(int dump, int width, int rob_sz, int rs_sz);
