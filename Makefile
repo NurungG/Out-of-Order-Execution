@@ -1,15 +1,5 @@
-CC=gcc
-CFLAGS=-Wall -g
-
-OBJS=main.o ooo.o
-
-TARGET=core_simulator
-
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $(OBJS)
+all:
+	g++ -o core_simulator main.cpp -std=c++11 -g
 
 clean:
-	rm *.o
-	rm $(TARGET)
+	rm core_simulator
