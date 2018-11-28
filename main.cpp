@@ -13,7 +13,6 @@ struct inst {
     int dest;
     int src1;
     int src2;
-    unsigned int addr;
 };
 
 struct rs_node {
@@ -124,7 +123,6 @@ void ooo_destroy() {
 }
 
 int do_cycle() {
-    enable_dealloc();
 
     do_commit();
     do_execution();
@@ -132,6 +130,7 @@ int do_cycle() {
     do_decode();
     do_fetch();
 
+    enable_dealloc();
 	do_dump();
 
 	if (check_exit()) return 1;
@@ -141,11 +140,12 @@ int do_cycle() {
 
 void do_fetch() {
     char buf[16];
+	unsigned int addr;
 
     for (int i = 0; i < width; i++) {
         if (fq.size() + fq_dealloc == fq_max) break;
         inst a;
-        if (in >> buf >> dec >> a.dest >> a.src1 >> a.src2 >> hex >> a.addr) {
+        if (in >> buf >> dec >> a.dest >> a.src1 >> a.src2 >> hex >> addr) {
 			total_insts++;
 
 			if (buf[3] == 'A') {  a.type = 0; num_intalu++; }
